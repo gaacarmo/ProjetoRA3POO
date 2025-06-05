@@ -1,15 +1,15 @@
-package projeto_igor;
+package RA3.projeto_igor;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox; // import de todos pacotes de estilo
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 import java.util.List;
 
@@ -103,7 +103,7 @@ public class Plataforma extends Application {
 
         // Configuração inicial
         root.setCenter(createPaginaInicial());
-        Scene scene = new Scene(root, 600, 500); // Tamanho um pouco maior
+        Scene scene = new Scene(root, 800, 600); // Tamanho um pouco maior
         scene.getStylesheets().add("data:text/css;charset=utf-8," + estiloCSS);
 
         primaryStage.setScene(scene);
@@ -204,12 +204,21 @@ public class Plataforma extends Application {
             }
         }
 
+        Button reativarPostagens = new Button("Reativar postagens excluídas");
+        Button retirarVerificado = new Button("Retirar verificado");
+        reativarPostagens.getStyleClass().add("botao-secundario");
+        retirarVerificado.getStyleClass().add("botao-secundario");
+
+        reativarPostagens.setOnAction(e -> root.setCenter(createPostagensExcluidas()));
+        retirarVerificado.setOnAction(e -> root.setCenter(createPostagensVerificadas()));
         // Botão para voltar à página inicial
         Button voltar = new Button("Voltar para página inicial");
         voltar.getStyleClass().add("botao-secundario");
         voltar.setOnAction(e -> root.setCenter(createPaginaInicial()));
 
-        VBox container = new VBox(15, vboxPrincipal, voltar);
+        HBox botoesAdicionais = new HBox(10, reativarPostagens, retirarVerificado);
+
+        VBox container = new VBox(15, vboxPrincipal, botoesAdicionais, voltar);
         container.setPadding(new Insets(20));
         return container;
     }
@@ -256,11 +265,15 @@ public class Plataforma extends Application {
             }
         }
 
+        Button reativarUsuario = new Button("Reativar usuários");
+        reativarUsuario.getStyleClass().add("botao-secundario");
+        reativarUsuario.setOnAction(e-> root.setCenter(createUsuariosInativos()));
+
         Button voltar = new Button("Voltar para página inicial");
         voltar.getStyleClass().add("botao-secundario");
         voltar.setOnAction(e -> root.setCenter(createPaginaInicial()));
 
-        VBox container = new VBox(15, vboxPrincipal, voltar);
+        VBox container = new VBox(15, vboxPrincipal, reativarUsuario, voltar);
         container.setPadding(new Insets(20));
         return container;
     }
@@ -300,6 +313,143 @@ public class Plataforma extends Application {
                 lblPostagensExcluidas, lblTotalUsuarios, lblUsuariosAtivos, lblUsuariosInativos, voltar);
 
         return vbox;
+    }
+
+    private VBox createUsuariosInativos(){
+        VBox vboxPrincipal = new VBox(15);
+        vboxPrincipal.setPadding(new Insets(20));
+
+        Label titulo = new Label("Lista de usu;arios inativos");
+        titulo.getStyleClass().add("label-titulo");
+        vboxPrincipal.getChildren().add(titulo);
+
+        for(Usuario usuario : todosUsuarios){
+            if(!usuario.isUsuarioAtivo()){
+                VBox usuarioBox = new VBox(10);
+                usuarioBox.getStyleClass().add("card");
+
+                Label nomeLabel = new Label("Nome do usuário: " + usuario.getNomeUsuario());
+                nomeLabel.getStyleClass().add("card-titulo");
+                Label ativoLabel = new Label("Status: " + (usuario.isUsuarioAtivo() ? "Ativo" : "Inativo"));
+
+                Button btnReativarUsuario = new Button("Reativar usuário");
+                btnReativarUsuario.getStyleClass().add("botao-secundario");
+
+                btnReativarUsuario.setOnAction(e ->{
+                    try{
+                        mod1.reativarUsuario(usuario);
+                        Persistencia.salvarUsuario(todosUsuarios);
+                        todosUsuarios = Persistencia.carregarUsuarios(); // Recarrega os dados
+                        root.setCenter(createUsuariosInativos());
+                    } catch (Exception ex){
+                        System.out.println("Erro ao tentar reativar usuário: " + ex.getMessage());
+                    };
+                });
+                usuarioBox.getChildren().addAll(nomeLabel, ativoLabel, btnReativarUsuario);
+                vboxPrincipal.getChildren().add(usuarioBox);
+            }
+        }
+
+        Button voltar = new Button("Voltar");
+        voltar.getStyleClass().add("botao-secundario");
+
+        vboxPrincipal.getChildren().add(voltar);
+        voltar.setOnAction(e -> root.setCenter(createVerificarPostagem()));
+
+        return vboxPrincipal;
+    }
+
+    private VBox createPostagensVerificadas(){
+        VBox vboxPrincipal = new VBox();
+        vboxPrincipal.setPadding(new Insets(20));
+
+        Label titulo = new Label("Página de postagens já verificadas");
+        titulo.getStyleClass().add("label-titulo");
+        vboxPrincipal.getChildren().add(titulo);
+
+        for(Postagem postagem : todasAsPostagens){
+            if(postagem.isVerificado()) {
+                VBox postagemBox = new VBox(10);
+                postagemBox.getStyleClass().add("card");
+
+                Label tituloLabel = new Label("Título: " + postagem.getTitulo());
+                tituloLabel.getStyleClass().add("card-titulo");
+                Label descricaoLabel = new Label("Descricao: " + postagem.getDescricao());
+                Label autorLabel = new Label("Autor: " + postagem.getUsuario().getNomeUsuario());
+
+                Button btnRetirarVerificado = new Button("Retirar verficado");
+                btnRetirarVerificado.getStyleClass().add("botao-secundario");
+
+                btnRetirarVerificado.setOnAction(e -> {
+                    try {
+                        mod1.retirarVerificado(postagem);
+                        Persistencia.salvarPostagens(todasAsPostagens);
+                        todasAsPostagens = Persistencia.carregarPostagens(); // Recarrega os dados
+                        root.setCenter(createPostagensVerificadas());
+                    } catch (Exception ex) {
+                        System.out.println("Erro ao retirar selo de verificado: " + ex.getMessage());
+                    }
+                });
+
+                postagemBox.getChildren().addAll(tituloLabel, descricaoLabel, autorLabel, btnRetirarVerificado);
+                vboxPrincipal.getChildren().add(postagemBox);
+            }
+        }
+
+        Button voltar = new Button("Voltar");
+        voltar.getStyleClass().add("botao-secundario");
+
+        vboxPrincipal.getChildren().add(voltar);
+        voltar.setOnAction(e -> root.setCenter(createVerificarPostagem()));
+
+        return vboxPrincipal;
+    }
+
+    private VBox createPostagensExcluidas(){
+        VBox vboxPrincipal = new VBox();
+        vboxPrincipal.setPadding(new Insets(20));
+
+        Label titulo = new Label("Postagens excluídas");
+        titulo.getStyleClass().add("label-titulo");
+        vboxPrincipal.getChildren().add(titulo);
+
+        for(Postagem postagem : todasAsPostagens){
+            if(!postagem.isPostagemAtiva()){
+                VBox postagemBox = new VBox(10);
+                postagemBox.getStyleClass().add("card");
+
+                Label tituloLabel = new Label("Título: " + postagem.getTitulo());
+                tituloLabel.getStyleClass().add("card-titulo");
+                Label descricaoLabel = new Label("Descricao: " + postagem.getDescricao());
+                Label autorLabel = new Label("Autor: " + postagem.getUsuario().getNomeUsuario());
+
+                Button btnReativarPostagem = new Button("Reativar postagem");
+                btnReativarPostagem.getStyleClass().add("botao-secundario");
+
+                btnReativarPostagem.setOnAction(e -> {
+                    try{
+                        mod1.reativarPostagem(postagem);
+                        Persistencia.salvarPostagens(todasAsPostagens);
+                        todasAsPostagens = Persistencia.carregarPostagens(); // Recarrega os dados
+                        root.setCenter(createPostagensExcluidas());
+                    } catch(Exception ex){
+                        System.out.println("Erro ao tentar reativar postagem: " + ex.getMessage());
+                    }
+
+                });
+
+                postagemBox.getChildren().addAll(descricaoLabel, autorLabel, btnReativarPostagem);
+                vboxPrincipal.getChildren().add(postagemBox);
+            }
+        }
+
+        Button voltar = new Button("Voltar");
+        voltar.getStyleClass().add("botao-secundario");
+
+        vboxPrincipal.getChildren().add(voltar);
+        voltar.setOnAction(e -> root.setCenter(createVerificarPostagem()));
+
+        return vboxPrincipal;
     }
 
     public static void main(String[] args) {

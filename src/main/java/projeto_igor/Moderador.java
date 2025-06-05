@@ -1,4 +1,4 @@
-package projeto_igor;
+package RA3.projeto_igor;
 
 import java.io.Serializable;
 
@@ -52,4 +52,21 @@ public class Moderador implements Serializable {
         postagem.setPostagemAtiva(false);
         System.out.println("A postagem foi excluída com sucesso");
     }
+
+    public void reativarUsuario(Usuario usuario){
+        usuario.setUsuarioAtivo(true);
+        System.out.println("O usuário foi reativado com sucesso");
+    }
+
+    public void reativarPostagem(Postagem postagem){
+        postagem.setPostagemAtiva(true);
+        System.out.println("A postagem foi reativada com sucesso");
+    }
+
+    public void retirarVerificado(Postagem postagem){
+        postagem.setVerificado(false);
+        System.out.println("A postagem teve seu verificado retirado com sucesso");
+    }
+
+
 }

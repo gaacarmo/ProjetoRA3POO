@@ -1,4 +1,18 @@
-package projeto_igor;
+package RA3.projeto_igor;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -9,6 +23,7 @@ public class Teste {
         for (Postagem p : postagens) { // imprime todas as postagens salvas
             System.out.println("Título: " + p.getTitulo());
             System.out.println("Selo de verificado: " + p.isVerificado());
+            System.out.println("Postagem ativa: : " + p.getDescricao());
             System.out.println("Postagem ativa: : " + p.isPostagemAtiva());
             System.out.println("Autor: " + p.getUsuario().getNomeUsuario());
             System.out.println("------");
@@ -22,3 +37,4 @@ public class Teste {
         }
     }
 }
+

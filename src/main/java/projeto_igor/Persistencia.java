@@ -1,8 +1,8 @@
-package projeto_igor;
+package RA3.projeto_igor;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class Persistencia { // fiz a persistência de objetos da forma que fui entendendo que seria, pesquisei na internet e fiz consultas com IA
     private static final String ARQUIVO_POSTAGENS = "postagens.dat";
