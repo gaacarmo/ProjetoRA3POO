@@ -12,4 +12,7 @@ module com.example.projetosra3poo {
     opens projeto_igor to javafx.fxml;
     exports projeto_igor;
 
+    opens projeto_lucas to javafx.fxml;
+    exports projeto_lucas;
+
 }
