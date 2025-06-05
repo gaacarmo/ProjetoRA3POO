@@ -1,4 +1,4 @@
-package RA3.projeto_igor;
+package projeto_igor;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
