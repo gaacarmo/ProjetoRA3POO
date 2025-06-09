@@ -185,7 +185,7 @@ public class TelaExibirUsuarios {
         GridPane grid = new GridPane();
         grid.setVgap(10);
         grid.setHgap(10);
-        grid.setPadding(new Insets(20));
+
         grid.setAlignment(Pos.CENTER);
 
         // Campos de edição com valores atuais do usuário
