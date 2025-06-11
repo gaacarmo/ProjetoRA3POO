@@ -1,8 +1,9 @@
-package projeto_gabriel;
+package projeto_gabriel.model;
 
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String nome;
     private String email;
@@ -13,6 +14,7 @@ public class Usuario implements Serializable {
         this.email = email;
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }

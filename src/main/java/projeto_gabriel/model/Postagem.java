@@ -1,9 +1,10 @@
-package projeto_gabriel;
+package projeto_gabriel.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Postagem implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String titulo;
     private String descricao;
@@ -16,6 +17,7 @@ public class Postagem implements Serializable {
         this.data = data;
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }
