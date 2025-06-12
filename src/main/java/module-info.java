@@ -17,11 +17,10 @@ module com.example.projetosra3poo {
     opens projeto_lucas to javafx.fxml;
     exports projeto_lucas;
 
-    exports projeto_marcel.pucpr;
-    exports projeto_marcel.pucpr.Controller;
-    exports projeto_marcel.pucpr.View;
-
-    // Acesso reflexivo para javafx.base (PropertyValueFactory, FXML)
-    opens projeto_marcel.pucpr.Model to javafx.base;
+    opens projetoRA3 to javafx.fxml;
+    exports projetoRA3;
+    exports projetoRA3.controller;
+    exports projetoRA3.view;
+    exports projetoRA3.model;
 
 }
